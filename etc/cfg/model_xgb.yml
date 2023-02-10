@@ -1,0 +1,21 @@
+model_name: model_xgb
+model_type: xgb # xgb, knb, sgd or stack
+
+target:
+  name: crashSeverity
+  score:
+    Non-Injury Crash: 0.0
+    Minor Crash: 1.0
+    Serious Crash: 2.0
+    Fatal Crash: 3.0
+
+predictors:
+  - lat
+  - lon
+  - speedLimit
+  - NumberOfLanes
+  - crashSHDescription
+  - flatHill
+  - weatherA
+  - light
+  - roadSurface

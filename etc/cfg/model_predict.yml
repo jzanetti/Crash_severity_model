@@ -1,0 +1,89 @@
+model_path: rfm/trained_model_xgb3.model
+
+inputs:
+  nslr: "etc/data/National_Speed_Limit_Register_(NSLR)/National_Speed_Limit_Register_(NSLR).shp"
+  road_centrelines: "etc/data/lds-nz-road-centrelines-topo-150k-SHP/nz-road-centrelines-topo-150k.shp"
+  road_slope: "etc/data/lris-nzenvds-slope-degrees-v10-GTiff/nzenvds-slope-degrees-v10.tif"
+
+vis:
+  cas_basemap:
+    enable: true
+    crash_lvl: 
+      #- Non-Injury Crash
+      # - Minor Crash
+      - Serious Crash
+      - Fatal Crash
+
+
+areas:
+  Upper Hutt City:
+    base:
+      crashSHDescription: "No"
+      NumberOfLanes: 2.0
+      flatHill: Flat # Flat or Hill Road or null
+      weatherA: "Fine"
+      light: "Overcast"
+      roadSurface: "Sealed"
+      speedlimit: null # 50.0 or null
+
+Queenstown-Lakes District:
+  base:
+    crashSHDescription: "No"
+    NumberOfLanes: null
+    flatHill: null
+    weatherA: "Fine"
+    light: "Overcast"
+    roadSurface: "Sealed"
+    speedlimit: null # 50.0
+
+roads:
+  myroad1:
+    Field Street:
+      rca_zone_name: Upper Hutt City
+      base:
+        crashSHDescription: "No"
+        NumberOfLanes: 2.0
+        flatHill: "Flat"
+        weatherA: "Fine"
+        light: "Overcast"
+        roadSurface: "Sealed"
+        speedlimit: 50.0
+      policies:
+        policy1:
+          crashSHDescription: "No"
+          NumberOfLanes: 2.0
+          flatHill: "Flat"
+          weatherA: "Fine"
+          light: "Overcast"
+          roadSurface: "Sealed"
+          speedlimit: 75.0
+    KURTH CRESCENT:
+      rca_zone_name: Upper Hutt City
+      base:
+        crashSHDescription: "No"
+        NumberOfLanes: 2.0
+        flatHill: "Flat"
+        weatherA: "Fine"
+        light: "Overcast"
+        roadSurface: "Sealed"
+        speedlimit: 50.0
+      policies:
+        policy1:
+          crashSHDescription: "No"
+          NumberOfLanes: 2.0
+          flatHill: "Flat"
+          weatherA: "Fine"
+          light: "Overcast"
+          roadSurface: "Sealed"
+          speedlimit: 75.0
+
+predictors:
+  - lat
+  - lon
+  - speedLimit
+  - NumberOfLanes
+  - crashSHDescription
+  - flatHill
+  - weatherA
+  - light
+  - roadSurface
