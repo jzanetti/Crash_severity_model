@@ -1,5 +1,4 @@
 from geopandas import read_file as gpd_read_file
-from process import NSLR_DATASET, ROADLINE_DATASET
 from pickle import load as pickle_load
 from pandas import DataFrame
 from geopandas import sjoin

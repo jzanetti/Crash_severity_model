@@ -35,6 +35,14 @@ def get_data_for_training(dataset: DataFrame, cfg: dict) -> dict:
             proc_predictors_cfg + 
             [proc_target_cfg["name"]]))
 
+    print("Check state highway ...")
+    if cfg["state_highway"]:
+        proc_dataset = proc_dataset[
+            proc_dataset["crashSHDescription"] == "Yes"]
+    else:
+        proc_dataset = proc_dataset[
+            proc_dataset["crashSHDescription"] == "No"]
+
     print(f"Converting target data ...")
     for proc_target_key in proc_target_cfg["score"]:
         proc_dataset[proc_target_cfg["name"]] = proc_dataset[

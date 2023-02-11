@@ -1,6 +1,8 @@
 model_name: model_xgb3
 model_type: xgb # xgb, knb, sgd or stack
 
+state_highway: false
+
 target:
   name: crashSeverity
   score:
@@ -14,7 +16,7 @@ predictors:
   - lon
   - speedLimit
   - NumberOfLanes
-  - crashSHDescription
+  # - crashSHDescription
   - flatHill
   - weatherA
   - light

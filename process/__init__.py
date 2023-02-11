@@ -3,10 +3,11 @@
 
 CAS_DATASET = "etc/data/cas.csv"
 CAS_PROJECTION = "EPSG:2193"
+CAS_VEHICLE_TYPES = ["bicycle", "bus", "schoolBus", "carStationWagon", "moped", "motorcycle", "suv", "taxi", "truck", "vanOrUtility", "vehicle"]
 
-NSLR_DATASET  = "etc/data/road_speedlimit/National_Speed_Limit_Register_(NSLR).shp"
-ROADLINE_DATASET = "etc/data/road_centreline/nz-road-centrelines-topo-150k.shp"
-ROAD_SLOPE = "etc/data/road_slope/nzenvds-slope-degrees-v10.tif"
+#NSLR_DATASET  = "etc/data/road_speedlimit/National_Speed_Limit_Register_(NSLR).shp"
+#ROADLINE_DATASET = "etc/data/road_centreline/nz-road-centrelines-topo-150k.shp"
+#ROAD_SLOPE = "etc/data/road_slope/nzenvds-slope-degrees-v10.tif"
 
 
 PREDICTORS_CFG = {
@@ -20,6 +21,8 @@ PREDICTORS_CFG = {
     "light": {"convert": {"Bright sun": 0.0, "Overcast": 1.0, "Twilight": 2.0, "Dark": 3.0}, "invalid_value": "Unknown"}, 
     "roadSurface": {"convert": {"End of seal": 0.0, "Unsealed": 1.0, "Sealed": 2.0}, "invalid_value": "Null"}
 }
+
+
 
 MODEL_CFGS = {
     "xgb": {

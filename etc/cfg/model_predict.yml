@@ -1,18 +1,26 @@
 model_path: rfm/trained_model_xgb3.model
 
 inputs:
-  nslr: "etc/data/National_Speed_Limit_Register_(NSLR)/National_Speed_Limit_Register_(NSLR).shp"
-  road_centrelines: "etc/data/lds-nz-road-centrelines-topo-150k-SHP/nz-road-centrelines-topo-150k.shp"
-  road_slope: "etc/data/lris-nzenvds-slope-degrees-v10-GTiff/nzenvds-slope-degrees-v10.tif"
+  nslr: "etc/data/road_speedlimit/National_Speed_Limit_Register_(NSLR).shp"
+  road_centrelines: "etc/data/road_centreline/nz-road-centrelines-topo-150k.shp"
+  road_slope: "etc/data/road_slope/nzenvds-slope-degrees-v10.tif"
 
 vis:
-  cas_basemap:
+  cas:
     enable: true
     crash_lvl: 
-      #- Non-Injury Crash
-      # - Minor Crash
-      - Serious Crash
-      - Fatal Crash
+      Non-Injury Crash:
+        color: "k"
+        size: 10
+      Minor Crash:
+        color: "g"
+        size: 30
+      Serious Crash:
+        color: "b"
+        size: 100
+      Fatal Crash:
+        color: "r"
+        size: 250
 
 
 areas:
@@ -82,7 +90,7 @@ predictors:
   - lon
   - speedLimit
   - NumberOfLanes
-  - crashSHDescription
+  # - crashSHDescription
   - flatHill
   - weatherA
   - light

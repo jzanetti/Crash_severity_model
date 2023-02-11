@@ -3,7 +3,7 @@
 SHELL = /bin/bash
 
 override CONDA = $(CONDA_BASE)/bin/conda
-override PKG = road_fatalities_model
+override PKG = crash_severity_model
 override CONDA_ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate
 
 help:
@@ -31,6 +31,9 @@ clear_all:
 
 create_env:
 	conda env create -n $(PKG) -f env.yml
+
+#install_pysal_deps:
+#	$(CONDA_BASE)/envs/$(PKG)/bin/pip3 install urbanaccess pandana
 
 env: clear_env create_env
 

@@ -2,3 +2,4 @@
 etc/data
 *.pyc
 rfm
+.vscode

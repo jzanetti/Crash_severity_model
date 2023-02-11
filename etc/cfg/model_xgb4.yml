@@ -1,6 +1,8 @@
 model_name: model_xgb4
 model_type: xgb # xgb, knb, sgd or stack
 
+state_highway: true
+
 target:
   name: crashSeverity
   score:
