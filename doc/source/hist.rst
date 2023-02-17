@@ -39,15 +39,15 @@ A few examples are shown below:
 Example 1: Fatal crashes in Auckland between 2000 and 2022
 ***********
 
-```
-crash_total --workdir /tmp
-            --regions Auckland
-```
+.. code-block:: bash
+
+   crash_total --workdir /tmp
+               --regions Auckland
+
+The follow figure shows all crash types (and all vehicle types) happened in Auckland between 2000 and 2022.
 
 .. image:: etc/total_crashes1.png
    :width: 600
-
-The above figure shows all crash types (and all vehicle types) happened in Auckland between 2000 and 2022.
 
 Example 1: All crashes in Auckland between 2000 and 2022
 ***********
@@ -57,11 +57,12 @@ Example 1: All crashes in Auckland between 2000 and 2022
    crash_total --workdir /tmp
                --regions Auckland
 
-.. image:: etc/total_crashes1.png
+The following figure shows all crash types (and all vehicle types) happened in Auckland between 2000 and 2022.
+The top 10 roads with the most crashes are also listed. 
+
+.. image:: img/total_crashes1.png
    :width: 600
 
-The above figure shows all crash types (and all vehicle types) happened in Auckland between 2000 and 2022.
-The top 10 roads with the most crashes are also listed. 
 
 Example 2: Fatal and severe bicycle crashes in Auckland between 2010 and 2020
 ***********
@@ -72,11 +73,11 @@ Example 2: Fatal and severe bicycle crashes in Auckland between 2010 and 2020
                --regions Auckland
                --crash_severity 'Serious Crash', 'Fatal Crash'
 
+The following figure shows serious and fatal crashes (for bicyles) happened in Auckland between 2000 and 2022.
 
-.. image:: etc/total_crashes2.png
+.. image:: total_crashes2.png
    :width: 600
 
-The above figure shows serious and fatal crashes (for bicyles) happened in Auckland between 2000 and 2022.
 
 Example 3: Fatal crashes in New Zealand between 2000 and 2020
 ***********
@@ -86,10 +87,10 @@ Example 3: Fatal crashes in New Zealand between 2000 and 2020
    crash_total --workdir /tmp
                --crash_severity 'Fatal Crash'
 
+The following figure shows all fatal crashes (for bicyles) happened in New Zealand between 2000 and 2022.
+
 .. image:: etc/total_crashes3.png
    :width: 600
-
-The above figure shows all fatal crashes (for bicyles) happened in New Zealand between 2000 and 2022.
 
 Example 4: All crashes in New Zealand between 2000 and 2020
 ***********
@@ -97,8 +98,8 @@ Example 4: All crashes in New Zealand between 2000 and 2020
 .. code-block:: bash
    crash_total --workdir /tmp
 
+The following figure shows all crashes (for all vehicle types) happened in New Zealand between 2000 and 2022.
+
 
 .. image:: etc/total_crashes4.png
    :width: 600
-
-The above figure shows all crashes (for all vehicle types) happened in New Zealand between 2000 and 2022.
