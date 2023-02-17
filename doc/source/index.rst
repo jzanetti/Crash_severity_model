@@ -7,6 +7,10 @@ Welcome to Crash Severity Model
 - Extreme Gradient Boosting
 - K-nearest Neighbours Regression
 
+
+.. image:: total_crashes2.png
+   :width: 600
+
 **Crash Severity Model** is developed by the Ministry of Transport of New Zealand.
 This system is under development. 
 Any issues/suggestions for this system please go to **Sijin ZHANG** at zhans@transport.govt.nz

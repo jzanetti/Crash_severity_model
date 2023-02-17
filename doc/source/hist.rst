@@ -49,7 +49,7 @@ The follow figure shows all crash types (and all vehicle types) happened in Auck
 .. image:: etc/total_crashes1.png
    :width: 600
 
-Example 1: All crashes in Auckland between 2000 and 2022
+Example 2: All crashes in Auckland between 2000 and 2022
 ***********
 
 .. code-block:: bash
@@ -64,7 +64,7 @@ The top 10 roads with the most crashes are also listed.
    :width: 600
 
 
-Example 2: Fatal and severe bicycle crashes in Auckland between 2010 and 2020
+Example 3: Fatal and severe bicycle crashes in Auckland between 2010 and 2020
 ***********
 
 .. code-block:: bash
@@ -79,7 +79,7 @@ The following figure shows serious and fatal crashes (for bicyles) happened in A
    :width: 600
 
 
-Example 3: Fatal crashes in New Zealand between 2000 and 2020
+Example 4: Fatal crashes in New Zealand between 2000 and 2020
 ***********
 
 .. code-block:: bash
@@ -89,10 +89,10 @@ Example 3: Fatal crashes in New Zealand between 2000 and 2020
 
 The following figure shows all fatal crashes (for bicyles) happened in New Zealand between 2000 and 2022.
 
-.. image:: etc/total_crashes3.png
+.. image:: doc/source/total_crashes2.png
    :width: 600
 
-Example 4: All crashes in New Zealand between 2000 and 2020
+Example 5: All crashes in New Zealand between 2000 and 2020
 ***********
 
 .. code-block:: bash
