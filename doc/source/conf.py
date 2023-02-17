@@ -2,8 +2,8 @@
 
 # -- Project information
 
-project = 'climaterisk'
-copyright = '2021, Sijin'
+project = 'Crash Severity Model'
+copyright = '2023, Sijin'
 author = 'Sijin'
 
 release = '0.1'
