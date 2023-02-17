@@ -1,7 +1,10 @@
-Configuration
-=====
+
 
 Both the model training and prediction are controlled by configuration files. Some example configuration files are given in ``etc/cfg``
+
+
+
+
 
 Training
 =====
@@ -62,6 +65,4 @@ This section must be csutomized for different experiments.
 
 Prediction
 =====
-
-
 

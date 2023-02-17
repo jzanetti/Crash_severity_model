@@ -4,6 +4,37 @@
 CAS_DATASET = "etc/data/cas.csv"
 CAS_PROJECTION = "EPSG:2193"
 CAS_VEHICLE_TYPES = ["bicycle", "bus", "schoolBus", "carStationWagon", "moped", "motorcycle", "suv", "taxi", "truck", "vanOrUtility", "vehicle"]
+CAS_REGIONS = [
+    'Auckland', 'Bay of Plenty', 'Canterbury',
+    'Gisborne', "Hawke's Bay",
+    'Manawatu-Whanganui', 'Marlborough', 'Nelson',
+    'Northland Region', 'Otago Region', 'Southland',
+    'Taranaki', 'Tasman', 'Waikato',
+    'Wellington', 'West Coast']
+CAS_CRASH_SEVERITY = ["Non-Injury Crash", "Minor Crash", "Serious Crash", "Fatal Crash"]
+CAS_VIS = {
+    "figsize": (25, 15),
+    "scatter_cfg": {
+        "Non-Injury Crash": {
+            "color": "k",
+            "size": 10},
+        "Minor Crash": {
+            "color": "g",
+            "size": 30
+        },
+        "Serious Crash": {
+            "color": "b",
+            "size": 100
+        },
+        "Fatal Crash": {
+            "color": "r",
+            "size": 300
+        }
+    }
+}
+
+
+
 
 #NSLR_DATASET  = "etc/data/road_speedlimit/National_Speed_Limit_Register_(NSLR).shp"
 #ROADLINE_DATASET = "etc/data/road_centreline/nz-road-centrelines-topo-150k.shp"
@@ -21,8 +52,6 @@ PREDICTORS_CFG = {
     "light": {"convert": {"Bright sun": 0.0, "Overcast": 1.0, "Twilight": 2.0, "Dark": 3.0}, "invalid_value": "Unknown"}, 
     "roadSurface": {"convert": {"End of seal": 0.0, "Unsealed": 1.0, "Sealed": 2.0}, "invalid_value": "Null"}
 }
-
-
 
 MODEL_CFGS = {
     "xgb": {

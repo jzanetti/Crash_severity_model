@@ -1,13 +1,14 @@
 Welcome to Crash Severity Model
 #######
 
-**Crash Severity Model** is an open-source AI model to analyze the road crashes and fatalities for New Zealand. The model uses a stacked AI model comprising three estimators:
+**Crash Severity Model** is an open-source AI model to analyze road crashes and fatalities for New Zealand. The model uses a stacked AI model comprising three estimators:
 
 - Densely Connected Neural Network
 - Extreme Gradient Boosting
 - K-nearest Neighbours Regression
 
-**Crash Severity Model** is developed by the Ministry of Transport of New Zealand. This is an onging effort. 
+**Crash Severity Model** is developed by the Ministry of Transport of New Zealand.
+This system is under development. 
 Any issues/suggestions for this system please go to **Sijin ZHANG** at zhans@transport.govt.nz
 
 
@@ -54,3 +55,5 @@ Contents
 .. toctree::
 
    Installation
+   hist
+   policy
