@@ -36,20 +36,8 @@ Optionally, the following arguments can be defined:
 
 A few examples are shown below:
 
-Example 1: Fatal crashes in Auckland between 2000 and 2022
-***********
 
-.. code-block:: bash
-
-   crash_total --workdir /tmp
-               --regions Auckland
-
-The follow figure shows all crash types (and all vehicle types) happened in Auckland between 2000 and 2022.
-
-.. image:: etc/total_crashes1.png
-   :width: 600
-
-Example 2: All crashes in Auckland between 2000 and 2022
+Example 1: All crashes in Auckland between 2000 and 2022
 ***********
 
 .. code-block:: bash
@@ -60,11 +48,11 @@ Example 2: All crashes in Auckland between 2000 and 2022
 The following figure shows all crash types (and all vehicle types) happened in Auckland between 2000 and 2022.
 The top 10 roads with the most crashes are also listed. 
 
-.. image:: img/total_crashes1.png
+.. image:: etc/total_crashes1.png
    :width: 600
 
 
-Example 3: Fatal and severe bicycle crashes in Auckland between 2010 and 2020
+Example 2: Fatal and severe bicycle crashes in Auckland between 2010 and 2020
 ***********
 
 .. code-block:: bash
@@ -75,11 +63,11 @@ Example 3: Fatal and severe bicycle crashes in Auckland between 2010 and 2020
 
 The following figure shows serious and fatal crashes (for bicyles) happened in Auckland between 2000 and 2022.
 
-.. image:: total_crashes2.png
+.. image:: etc/total_crashes2.png
    :width: 600
 
 
-Example 4: Fatal crashes in New Zealand between 2000 and 2020
+Example 3: Fatal crashes in New Zealand between 2000 and 2020
 ***********
 
 .. code-block:: bash
@@ -89,10 +77,10 @@ Example 4: Fatal crashes in New Zealand between 2000 and 2020
 
 The following figure shows all fatal crashes (for bicyles) happened in New Zealand between 2000 and 2022.
 
-.. image:: doc/source/total_crashes2.png
+.. image:: etc/total_crashes3.png
    :width: 600
 
-Example 5: All crashes in New Zealand between 2000 and 2020
+Example 4: All crashes in New Zealand between 2000 and 2020
 ***********
 
 .. code-block:: bash
