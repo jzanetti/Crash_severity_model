@@ -8,27 +8,31 @@ Two types of tasks are currently supported in **Crash_severity_model**:
 
 In this section, **Total historical crashes** is focused.
 
+Usage:
+***********
+
 Many total historical crashes (minor, severe and fatal) related analysis (and figures) can be produced using:
 
-```
-crash_total --workdir <WORKING DIRECTORY>
-            [--regions <REGIONS>]
-            [--crash_severity <CRASH SEVERITY TYPES>]
-            [--vehicle_types <VEHICLE TYPES>]
-            [--years <CRASH YEARS>]
-```
+.. code-block:: bash
+
+   crash_total --workdir <WORKING DIRECTORY>
+               [--regions <REGIONS>]
+               [--crash_severity <CRASH SEVERITY TYPES>]
+               [--vehicle_types <VEHICLE TYPES>]
+               [--years <CRASH YEARS>]
+
 
 where ``--workdir`` must be specified for storing all the intermediate files and the system outputs.
 
 Optionally, the following arguments can be defined:
 
-- ``--regions``: It is used to specify the regions to be used [default: all regions in NZ]. It can be chosen from ``Auckland``, ``Bay of Plenty``, ``Canterbury``, ``Gisborne', ``Hawke's Bay``, ``Manawatu-Whanganui``, ``Marlborough``, 'Nelson``, ``Northland Region``, ``Otago Region``, ``Southland``, ``Taranaki``, ``Tasman``, ``Waikato``, ``Wellington``, ``West Coast``.
+- ``--regions``: It is used to specify the regions to be used *[default: all regions in NZ]*. It can be chosen from ``Auckland``, ``Bay of Plenty``, ``Canterbury``, ``Gisborne``, ``Hawke's Bay``, ``Manawatu-Whanganui``, ``Marlborough``, ``Nelson``, ``Northland Region``, ``Otago Region``, ``Southland``, ``Taranaki``, ``Tasman``, ``Waikato``, ``Wellington``, ``West Coast``.
 
-- ``--crash_severity``: Crash severity to be analyzed [default: all crashes types]. It can be chosen from ``Non-Injury Crash``, ``Minor Crash``, ``Serious Crash`` and ``Fatal Crash``.
+- ``--crash_severity``: Crash severity to be analyzed *[default: all crashes types]*. It can be chosen from ``Non-Injury Crash``, ``Minor Crash``, ``Serious Crash`` and ``Fatal Crash``.
 
-- ``--vehicle_types``: Vehicle types to be analyzed [default: all vehicle types]. It can be chosen from ``bicycle``, ``bus``, ``schoolBus``, ``carStationWagon``, ``moped``, ``motorcycle``, ``suv``, ``taxi``, ``truck``, ``vanOrUtility``, ``vehicle``.
+- ``--vehicle_types``: Vehicle types to be analyzed *[default: all vehicle types]*. It can be chosen from ``bicycle``, ``bus``, ``schoolBus``, ``carStationWagon``, ``moped``, ``motorcycle``, ``suv``, ``taxi``, ``truck``, ``vanOrUtility``, ``vehicle``.
 
-- ``--years``: Years to be analysed [default: all years]. It should be set in a list, e.g., ``--years 2017,2018``.
+- ``--years``: Years to be analysed *[default: all years]*. It should be set in a list, e.g., ``--years 2017,2018``.
 
 A few examples are shown below:
 
@@ -48,10 +52,10 @@ The above figure shows all crash types (and all vehicle types) happened in Auckl
 Example 1: All crashes in Auckland between 2000 and 2022:
 ***********
 
-```
-crash_total --workdir /tmp
-            --regions Auckland
-```
+.. code-block:: bash
+
+   crash_total --workdir /tmp
+               --regions Auckland
 
 .. image:: etc/total_crashes1.png
    :width: 600
@@ -62,11 +66,12 @@ The top 10 roads with the most crashes are also listed.
 Example 2: Fatal and severe bicycle crashes in Auckland between 2010 and 2020:
 ***********
 
-```
-crash_total --workdir /tmp
-            --regions Auckland
-            --crash_severity 'Serious Crash', 'Fatal Crash'
-```
+.. code-block:: bash
+
+   crash_total --workdir /tmp
+               --regions Auckland
+               --crash_severity 'Serious Crash', 'Fatal Crash'
+
 
 .. image:: etc/total_crashes2.png
    :width: 600
@@ -76,10 +81,10 @@ The above figure shows serious and fatal crashes (for bicyles) happened in Auckl
 Example 3: Fatal crashes in New Zealand between 2000 and 2020:
 ***********
 
-```
-crash_total --workdir /tmp
-            --crash_severity 'Fatal Crash'
-```
+.. code-block:: bash
+
+   crash_total --workdir /tmp
+               --crash_severity 'Fatal Crash'
 
 .. image:: etc/total_crashes3.png
    :width: 600
@@ -89,9 +94,9 @@ The above figure shows all fatal crashes (for bicyles) happened in New Zealand b
 Example 4: All crashes in New Zealand between 2000 and 2020:
 ***********
 
-```
-crash_total --workdir /tmp
-```
+.. code-block:: bash
+   crash_total --workdir /tmp
+
 
 .. image:: etc/total_crashes4.png
    :width: 600
