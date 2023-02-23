@@ -6,21 +6,18 @@ inputs:
   road_slope: "etc/data/road_slope/nzenvds-slope-degrees-v10.tif"
 
 vis:
-  cas:
-    enable: true
-    crash_lvl: 
-      Non-Injury Crash:
-        color: "k"
-        size: 10
-      Minor Crash:
-        color: "g"
-        size: 30
-      Serious Crash:
-        color: "b"
-        size: 100
-      Fatal Crash:
-        color: "r"
-        size: 250
+  colorbar_cfg:
+    orientation: horizontal
+    axs:
+      - 0.1 # left
+      - 0.4 # bottom
+      - 0.3 # width
+      - 0.01 # height
+  clim:
+    min: -0.05
+    max: 0.05
+  cmap: seismic
+
 
 roads:
   myroad0:
@@ -32,7 +29,7 @@ roads:
         weatherA: "Fine"
         light: "Overcast"
         roadSurface: "Sealed"
-        speedlimit: 50.0
+        speedlimit: null
       policies:
         policy1:
           NumberOfLanes: 2.0
@@ -40,44 +37,28 @@ roads:
           weatherA: "Fine"
           light: "Overcast"
           roadSurface: "Sealed"
-          speedlimit: 75.0
-
-  myroad1:
-    Field Street:
-      rca_zone_name: Upper Hutt City
-      base:
-        NumberOfLanes: 2.0
-        flatHill: "Flat"
-        weatherA: "Fine"
-        light: "Overcast"
-        roadSurface: "Sealed"
-        speedlimit: 50.0
-      policies:
-        policy1:
-          NumberOfLanes: 2.0
-          flatHill: "Flat"
-          weatherA: "Fine"
-          light: "Overcast"
-          roadSurface: "Sealed"
-          speedlimit: 75.0
-    KURTH CRESCENT:
-      rca_zone_name: Upper Hutt City
-      base:
-        NumberOfLanes: 2.0
-        flatHill: "Flat"
-        weatherA: "Fine"
-        light: "Overcast"
-        roadSurface: "Sealed"
-        speedlimit: 50.0
-      policies:
-        policy1:
+          speedlimit: 30.0
+        policy2:
           NumberOfLanes: 2.0
           flatHill: "Flat"
           weatherA: "Fine"
           light: "Overcast"
           roadSurface: "Sealed"
           speedlimit: 40.0
-
+        policy3:
+          NumberOfLanes: 2.0
+          flatHill: "Flat"
+          weatherA: "Fine"
+          light: "Overcast"
+          roadSurface: "Sealed"
+          speedlimit: 60.0
+        policy4:
+          NumberOfLanes: 2.0
+          flatHill: "Flat"
+          weatherA: "Fine"
+          light: "Dark"
+          roadSurface: "Sealed"
+          speedlimit: null
 predictors:
   - lat
   - lon

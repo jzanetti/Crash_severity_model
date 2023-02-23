@@ -13,8 +13,8 @@ import argparse
 from os.path import exists
 from os import makedirs
 from process.utils import read_cfg, read_cas, get_total_cas
-from process.predict import read_base_data, read_model, area_prediction
-from process.vis import plot_map
+from process.predict import read_base_data, read_model, area_prediction, road_prediction
+from process.vis import plot_risk
 
 def get_example_usage():
     example_text = """example:
@@ -39,7 +39,7 @@ def setup_parser():
     return parser.parse_args(
         [
             "--workdir", "rfm",
-            "--cfg", "etc/cfg/model_predict.yml"
+            "--cfg", "etc/cfg/model_predict2.yml"
         ]
     )
 
@@ -60,26 +60,36 @@ def get_data():
 
     print("Reading CAS ...")
     cas_data = None
-    if cfg["vis"]["cas"]["enable"]:
-        cas_data = read_cas(add_geometry=True)
-        cas_total_data = get_total_cas(cas_data, base_data)
+    cas_total_data = None
+    #if cfg["vis"]["cas"]["enable"]:
+    #    cas_data = read_cas(add_geometry=True)
+    #    cas_total_data = get_total_cas(cas_data)
 
     print("Start prediction ...")
-    pred = {}
-    for proc_area in cfg["areas"]:
-        pred[proc_area] = area_prediction(model, base_data, proc_area, cfg)
+    pred = {"area": {}, "raod": {}}
+    try:
+        for proc_area in cfg["areas"]:
+            pred["area"][proc_area] = area_prediction(
+                model, base_data, proc_area, cfg)
+    except KeyError:
+        pass
+    
+    try:
+        for road_cluster_name in cfg["roads"]:
+            pred["raod"][road_cluster_name] = road_prediction(
+                model, base_data, road_cluster_name, cfg)
+    except KeyError:
+        pass
 
     print("Plotting ...")
-    plot_map(
+    plot_risk(
         args.workdir, 
-        pred, 
+        pred["raod"], 
         base_data, 
         cfg["vis"],
         cas_data=cas_data,
         cas_total_data=cas_total_data, 
-        figsize=(15, 15), 
-        cmap="jet",
-        display_risk_as_line=False)
+        figsize=(15, 15))
 
 if __name__ == "__main__":
     get_data()

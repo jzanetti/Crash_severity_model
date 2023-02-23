@@ -35,7 +35,7 @@ def setup_parser():
     return parser.parse_args(
         [
             "--workdir", "rfm",
-            "--cfg", "etc/cfg/model_xgb3.yml"
+            "--cfg", "etc/cfg/model_sgd.yml"
         ]
     )
 

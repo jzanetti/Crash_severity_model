@@ -1,10 +1,7 @@
+Policy analysis
+=====
 
-
-Both the model training and prediction are controlled by configuration files. Some example configuration files are given in ``etc/cfg``
-
-
-
-
+The policy analysis model is trained and predicted using a configuration files. Some example configuration files are given in ``etc/cfg``.
 
 Training
 =====
@@ -47,22 +44,49 @@ We also need to define ``predictors`` in the configuration, e.g.
 ```
 predictors:
   NumberOfLanes:
-    convert: null
-    invalid_value: null
   crashSHDescription:
-    convert:
-      No: 0.0
-      Yes: 1.0
-    invalid_value: "Unknown"
+  ...
 ```
 
-The above section defines two predictos to be used in the model: (1) ``NumberOfLanes`` does not require any value conversion (e.g., to convert a character to a number) 
-and there is no invalid value in the dataset. (2) In contrast, for ``crashSHDescription``, we want to convert ``No`` to ``0.0``, and ``Yes`` to ``1.0``, also,
-the invalid value for this predictor is ``Unknown``.
+The above section defines two predictos to be used in the model. For example, in this section, we have two predictors ``NumberOfLanes`` and ``crashSHDescription``, 
+while more predictors can be included.
 
-This section must be csutomized for different experiments.
+The model training can be run as:
+
+.. code-block:: bash
+
+  cli_train --workdir <WORKING DIRECTORY>
+            --cfg <CONFIGURATION FILE>
+
+where ``--workdir`` indicates the directory where holds all the intermediate and output files, and ``--cfg`` is the configuration file to use.
 
 
 Prediction
 =====
+
+The prediction step is also controlled via a configuration file.
+
+First, we need to define the trained model to be used:
+
+```
+model_path: rfm/trained_model_xgb3_no_state_highway.model
+```
+
+The model is trained by the previous step.
+
+Second, there are three input data needed for the road policy analysis configuration:
+
+  - Road speed limitation
+  - Road centrelines
+  - Road slope
+
+The above data can be defined via:
+
+```
+inputs:
+  nslr: "etc/data/road_speedlimit/National_Speed_Limit_Register_(NSLR).shp"
+  road_centrelines: "etc/data/road_centreline/nz-road-centrelines-topo-150k.shp"
+  road_slope: "etc/data/road_slope/nzenvds-slope-degrees-v10.tif"
+```
+
 

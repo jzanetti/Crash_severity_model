@@ -4,6 +4,7 @@ from geopandas import GeoDataFrame, sjoin_nearest
 from os.path import join
 from process import CAS_VIS
 from pandas.plotting import table as pandas_plot_table
+import matplotlib.ticker as ticker
 
 def plot_total_crashes(
     workdir: str,
@@ -87,7 +88,7 @@ def plot_total_crashes(
     plt.close()
 
 
-def plot_map(
+def plot_risk(
     workdir: str, 
     pred: dict, 
     base_data: dict, 
@@ -95,87 +96,42 @@ def plot_map(
     cas_data: dict = None,
     cas_total_data: dict = None,
     figsize: tuple = (15, 15), 
-    cmap: str = "jet",
-    display_risk_as_line: bool = True):
-
-
-    def _get_latlon_range(data_input: GeoDataFrame) -> dict:
-        """Get lat and lon limits
-
-        Args:
-            data_input (GeoDataFrame): a geodataframe data
-
-        Returns:
-            dict: the dict contains lat and lon limits
-        """
-        lon_range = (
-            data_input["lon"].min(), 
-            data_input["lon"].max())
-        lat_range = (
-            data_input["lat"].min(), 
-            data_input["lat"].max())
-        
-        return {"lat": lat_range, "lon": lon_range}
-
+    title_str: str or None = None):
 
     for proc_area in pred:
 
-        latlon = _get_latlon_range(pred[proc_area]["base"])
-
-        if vis_cfg["cas"]["enable"]:
-
-            proc_cas_data = cas_data.query(
-                f"{latlon['lat'][0]} < lat < {latlon['lat'][1]} & " +
-                f"{latlon['lon'][0]} < lon < {latlon['lon'][1]}"
-            )
-
-            ax = None
-            for crash_lvl in vis_cfg["cas"]["crash_lvl"]:
-                
-                if vis_cfg["cas"]["crash_lvl"][crash_lvl] is None:
-                    continue
-
-                proc_cas_data2 = proc_cas_data[proc_cas_data["crashSeverity"] == crash_lvl]
-
-                ax = proc_cas_data2.plot(
-                    ax = ax,
-                    markersize=vis_cfg["cas"]["crash_lvl"][crash_lvl]["size"],
-                    figsize=figsize, 
-                    color=vis_cfg["cas"]["crash_lvl"][crash_lvl]["color"],
-                    legend=True,
-                    alpha=0.2)
-
-            cx.add_basemap(
-                ax, 
-                crs=base_data["roadline"].crs.to_string(), 
-                source=cx.providers.OpenStreetMap.DE, 
-                attribution_size=1)
-            plt.savefig(
-                join(workdir, f"{proc_area}_crashes.png")
-            )
-            plt.close()
-
         for policy_name in pred[proc_area]:
-
-            if display_risk_as_line:
-                pred[proc_area][policy_name] = sjoin_nearest(
-                    cas_total_data["line"], 
-                    pred[proc_area][policy_name][["risk", "geometry", "lat", "lon"]], 
-                    max_distance=0.001)
+            
+            if policy_name == "base":
+                continue
 
             ax = pred[proc_area][policy_name].plot(
-                column="risk", 
-                markersize=5, 
+                column="risk_change", 
+                markersize=30, 
                 figsize=figsize, 
-                legend=True, 
-                cmap=cmap)
+                cmap=vis_cfg["cmap"],
+                vmin=vis_cfg["clim"]["min"], 
+                vmax=vis_cfg["clim"]["max"])
 
+            cbar_ax = ax.figure.add_axes(vis_cfg["colorbar_cfg"]["axs"]) 
+            ax.figure.colorbar(
+                ax.collections[0], 
+                orientation=vis_cfg["colorbar_cfg"]["orientation"],
+                cax=cbar_ax,
+                format=ticker.PercentFormatter(xmax=1, decimals=0))
+    
             cx.add_basemap(
                 ax, 
                 crs=base_data["roadline"].crs.to_string(), 
-                source=cx.providers.OpenStreetMap.DE, 
+                source=cx.providers.OpenStreetMap.Mapnik , 
                 attribution_size=1)
+            
+            title_str = f"Risk change: {policy_name}"
+            if title_str is not None:
+                plt.title(title_str)
+
             plt.savefig(
-                join(workdir, f"{proc_area}_{policy_name}.png")
+                join(workdir, f"{proc_area}_{policy_name}.png"),
+                bbox_inches="tight"
             )
             plt.close()

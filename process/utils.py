@@ -85,7 +85,8 @@ def get_total_cas(cas_data: DataFrame) -> DataFrame:
     agg_operator["lon"] = "mean"
 
     df = cas_data.groupby(
-        ["region", "crashLocation1", "crashLocation2"], as_index=False).agg(agg_operator)
+        ["region", "crashLocation1", "crashLocation2"], 
+        as_index=False).agg(agg_operator)
     df["total"]= df[CAS_VEHICLE_TYPES].sum(axis=1)
 
     df = GeoDataFrame(
