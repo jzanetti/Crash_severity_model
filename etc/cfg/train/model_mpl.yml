@@ -1,14 +1,14 @@
-model_name: model_xgb4
-model_type: xgb # xgb, knb, sgd or stack
+model_name: model_mpl_no_state_highway
+model_type: mlp # xgb, knb, mlp, sgd or stack
 
-state_highway: true
+state_highway: false
 
 target:
   name: crashSeverity
   score:
     Non-Injury Crash: 0.0
     Minor Crash: 0.0
-    Serious Crash: 0.0
+    Serious Crash: 1.0
     Fatal Crash: 1.0
 
 predictors:
@@ -16,7 +16,6 @@ predictors:
   - lon
   - speedLimit
   - NumberOfLanes
-  - crashSHDescription
   - flatHill
   - weatherA
   - light

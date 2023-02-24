@@ -6,6 +6,8 @@ from process.utils import data_conversions
 from geopandas import GeoDataFrame, points_from_xy
 from rioxarray import open_rasterio
 from xarray.core.dataarray import DataArray
+from copy import deepcopy
+
 
 def read_base_data(input_cfg: dict) -> dict:
     """Read base data for the model prediction
@@ -115,6 +117,42 @@ def road_prediction(model :dict, base_data: dict, road_cluster_name: str, predic
     Returns:
         DataFrame: output prediction
     """
+
+    def _add_pseudo_latlon(predictors_list: list):
+        """Sometimes we don't need lat or lon in predictors, however we need lat and lon for visualization later
+        """
+        psuedo_lat = False
+        if "lat" not in predictors_list:
+            psuedo_lat = True
+            predictors_list.append("lat")
+
+        psuedo_lon = False
+        if "lon" not in predictors_list:
+            psuedo_lon = True
+            predictors_list.append("lon")
+        
+        return {
+            "pseudo_flag": {"lat": psuedo_lat, "lon": psuedo_lon},
+            "predictors": predictors_list
+        }
+    
+    def _create_predictors(predictors_info: dict, proc_base_data_ori: DataFrame):
+        """Create predictors
+
+        Args:
+            predictors_info (dict): predictors to be used
+        """
+
+        proc_base_data_all = deepcopy(proc_base_data_ori)
+
+        if predictors_info["pseudo_flag"]["lat"]:
+            proc_base_data_ori = proc_base_data_ori.drop("lat", axis=1)
+
+        if predictors_info["pseudo_flag"]["lon"]:
+            proc_base_data_ori = proc_base_data_ori.drop("lon", axis=1)
+        
+        return {"predictors": proc_base_data_ori, "original": proc_base_data_all}
+
     cur_cfg = predict_cfg["roads"][road_cluster_name]
 
     output = {}
@@ -141,37 +179,45 @@ def road_prediction(model :dict, base_data: dict, road_cluster_name: str, predic
                 x["speedLim_2"], 
                 x["lane_count"])], axis=1)
 
+
+        predictors_info = _add_pseudo_latlon(predict_cfg["predictors"])
+
         # Start analysis base policy ...
         proc_base_data = get_data_for_prediction(
             proc_all_roads,
             base_data["roadslope"],
-            predict_cfg["predictors"], 
+            predictors_info["predictors"], 
             cur_road_cfg["base"])
         
         proc_base_data = data_conversions(
             proc_base_data, predict_cfg["predictors"])
-        
-        proc_base_data["risk"] = model["model"].predict(
-                    model["scaler"].transform(proc_base_data))
+    
+        data_to_use = _create_predictors(predictors_info, proc_base_data)
 
-        output[cur_road_name]["base"] = proc_base_data
+        data_to_use["original"]["risk"] = model["model"].predict(
+                    model["scaler"].transform(data_to_use["predictors"]))
+
+        output[cur_road_name]["base"] = data_to_use["original"]
 
         # Start analysis other policies ...
         all_policies = []
         for proc_policy in cur_road_cfg["policies"]:
+
             proc_base_data = get_data_for_prediction(
                 proc_all_roads,
                 base_data["roadslope"],
-                predict_cfg["predictors"], 
+                predictors_info["predictors"], 
                 cur_road_cfg["policies"][proc_policy])
             
             proc_base_data = data_conversions(
-                proc_base_data, predict_cfg["predictors"])
+                proc_base_data, predictors_info["predictors"])
             
-            proc_base_data["risk"] = model["model"].predict(
-                model["scaler"].transform(proc_base_data))
+            data_to_use = _create_predictors(predictors_info, proc_base_data)
+
+            data_to_use["original"]["risk"] = model["model"].predict(
+                model["scaler"].transform(data_to_use["predictors"]))
         
-            output[cur_road_name][proc_policy] = proc_base_data
+            output[cur_road_name][proc_policy] = data_to_use["original"]
 
             all_policies.append(proc_policy)
 
@@ -227,79 +273,3 @@ def calculate_risk_change(prediction: dict) -> dict:
 
 
 
-
-
-import pandas as pd
-
-# create two sample dataframes
-df1 = pd.DataFrame({'A': [1, 2, 3, 4], 'B': [5, 6, 7, 8], 'C': [9, 10, 11, 12]})
-df2 = pd.DataFrame({'A': [5, 6, 7, 8], 'B': [1, 2, 3, 4], 'D': [13, 14, 15, 16]})
-
-# identify the two columns to match on
-cols_to_match = ['A', 'B']
-
-# merge the two dataframes on the two columns
-merged_df = pd.merge(df1, df2, on=cols_to_match, how='inner')
-
-# filter the resulting merged dataframe to only keep the rows where the values in the two columns are the same
-filtered_df = merged_df[merged_df[cols_to_match[0]] == merged_df[cols_to_match[1]]]
-
-print(filtered_df)
-
-
-
-
-
-def area_prediction(model :dict, base_data: dict, area_name: str, predict_cfg: dict) -> DataFrame:
-    """Generate prediction for an area
-
-    Args:
-        model (dict): model to be used
-        base_data (dict): base data to be applied
-        area_name (str): area name, e.g., Upper Hutt City
-        predict_cfg (dict): prediction configuration
-
-    Returns:
-        DataFrame: Dataframe for output
-    """
-
-    proc_speed_zone_data = base_data["nslr"].loc[
-        base_data["nslr"]["rcaZoneR_1"] == area_name]
-
-    proc_speed_zone_data = proc_speed_zone_data.to_crs(4326)
-    proc_data = sjoin(
-        base_data["roadline"], 
-        proc_speed_zone_data, op="intersects")
-
-    proc_all_roads = proc_data.apply(
-        lambda x: [y for y in (
-            x["geometry"].coords, 
-            x["speedLim_2"], 
-            x["lane_count"])], axis=1)
-
-    output = {}
-    for policy_name in predict_cfg["areas"][area_name]:
-
-        proc_base_data = get_data_for_prediction(
-            proc_all_roads,
-            base_data["roadslope"],
-            predict_cfg["predictors"], 
-            predict_cfg["areas"][area_name][policy_name])
-
-        proc_base_data = data_conversions(
-            proc_base_data, predict_cfg["predictors"])
-
-        proc_base_data["risk"] = model["model"].predict(
-            model["scaler"].transform(proc_base_data))
-
-        if "lat" in predict_cfg["predictors"] and "lon" in predict_cfg["predictors"]:
-            proc_base_data = GeoDataFrame(
-                proc_base_data, 
-                geometry=points_from_xy(
-                    proc_base_data.lon, proc_base_data.lat))
-
-            proc_base_data = proc_base_data.set_crs(epsg=4326)
-
-        output[policy_name] = proc_base_data
-
-    return output

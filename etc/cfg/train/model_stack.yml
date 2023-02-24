@@ -1,5 +1,5 @@
-model_name: model_sgd_no_state_highway
-model_type: sgd # xgb, knb, sgd or stack
+model_name: model_stack_no_state_highway
+model_type: stack # xgb, mlp, knb, sgd or stack
 
 state_highway: false
 
@@ -12,8 +12,8 @@ target:
     Fatal Crash: 1.0
 
 predictors:
-  - lat
-  - lon
+  #- lat
+  #- lon
   - speedLimit
   - NumberOfLanes
   - flatHill

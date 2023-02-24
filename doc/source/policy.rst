@@ -9,7 +9,8 @@ The model can be trained using the following three methods:
 
 - ``XGBoost``
 - ``SGD``
-- A stacked model including both ``XGBoost`` and ``SGD``
+- ``Neural network``
+- A stacked model including both ``XGBoost``, ``SGD`` and ``Neural network``.
 
 The model must be specified in the configuration file. For example,
 
@@ -23,6 +24,7 @@ In ``model_type`` you must specify the model name to be exported (in this case i
 - ``xgb``: XGBoost
 - ``knb``: K-neighborhood Regression 
 - ``sgd``: Stochastic Gradient Descent model
+- ``mlp``: Neural network
 - ``stack``: An ensemble model contains all the estimators
 
 The target must be specified via the ``target`` section, for example:

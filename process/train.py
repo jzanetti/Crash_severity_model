@@ -1,15 +1,15 @@
 from os.path import join
 from pickle import dump as pickle_dump
 
-from pandas import DataFrame, read_csv
-from pyproj import Proj, transform
+from pandas import DataFrame
 from sklearn.ensemble import StackingRegressor
 from sklearn.linear_model import SGDRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPRegressor
 from xgboost import XGBRegressor
 
-from process import CAS_DATASET, CAS_PROJECTION, MODEL_CFGS
+from process import MODEL_CFGS
 from process.utils import data_conversions
 
 
@@ -74,9 +74,6 @@ def model_train(cfg: dict, workdir: str, data_to_use: dict, n_jobs: int = 4, ver
         n_jobs (int, optional): cpu to be used. Defaults to 4.
         verbose (int, optional): debug level. Defaults to 100.
     """
-    # VEHICLES = ["bus", "carStationWagon", "moped", "motorcycle", 
-    # "pedestrian", "suv", "taxi", "truck", 
-    # "vanOrUtility", "vehicle", "bicycle"]
 
     def _get_data_scaler(training_data: DataFrame):
         """Get data scaler
@@ -120,11 +117,20 @@ def model_train(cfg: dict, workdir: str, data_to_use: dict, n_jobs: int = 4, ver
         if cfg["model_type"] == "sgd":
             final_model = sgd_model
 
+    if cfg["model_type"] in ["mlp", "stack"]:
+        mlp_model = MLPRegressor(
+            hidden_layer_sizes=1000)
+
+        if cfg["model_type"] == "mlp":
+            final_model = mlp_model
+
+
     if cfg["model_type"] == "stack":
         final_model = StackingRegressor(
             estimators=[
-                ("xgb", xgb_model),
-                ("kng", knb_model)
+                # ("xgb", xgb_model),
+                # ("kng", knb_model),
+                ("mpl", mlp_model)
             ],
             final_estimator = sgd_model,
             verbose=verbose,

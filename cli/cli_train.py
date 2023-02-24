@@ -33,10 +33,10 @@ def setup_parser():
     parser.add_argument("--cfg", required=True, help="configuration path")
 
     return parser.parse_args(
-        [
-            "--workdir", "rfm",
-            "--cfg", "etc/cfg/model_sgd.yml"
-        ]
+        # [
+        #    "--workdir", "rfm",
+        #    "--cfg", "etc/cfg/train/model_sgd.yml"
+        # ]
     )
 
 

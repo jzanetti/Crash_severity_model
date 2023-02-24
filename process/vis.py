@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import contextily as cx
-from geopandas import GeoDataFrame, sjoin_nearest
+from geopandas import GeoDataFrame
 from os.path import join
 from process import CAS_VIS
 from pandas.plotting import table as pandas_plot_table
@@ -11,14 +11,14 @@ def plot_total_crashes(
     cas_data: GeoDataFrame,
     cas_info: dict,
     cas_total_data):
+    """Plot total crashes
 
+    Args:
+        workdir (str): working directory
+        cas_data (GeoDataFrame): decoded CAS data
+        cas_info (dict): CAS data meta information
+        cas_total_data (_type_): processed CAS data with total crashes
     """
-    cas_total_data_line = sjoin_nearest(
-        base_data["roadline"], 
-        proc_cas_data[["geometry", "total"]], 
-        max_distance=0.0001)[["total", "geometry"]]
-    """
-
     ax = None
     legend_list = []
     legend_labels = []
@@ -93,25 +93,34 @@ def plot_risk(
     pred: dict, 
     base_data: dict, 
     vis_cfg: dict, 
-    cas_data: dict = None,
-    cas_total_data: dict = None,
-    figsize: tuple = (15, 15), 
-    title_str: str or None = None):
+    figsize: tuple = (15, 15)):
+    """Plot risk map
 
-    for proc_area in pred:
+    Args:
+        workdir (str): working directory
+        pred (dict): prediction
+        base_data (dict): base data to be applied
+        vis_cfg (dict): visualization configuration
+        figsize (tuple, optional): figure size to be used. Defaults to (15, 15).
+    """
+    for proc_road_cluster in pred:
 
-        for policy_name in pred[proc_area]:
+        for policy_name in pred[proc_road_cluster]:
             
             if policy_name == "base":
                 continue
 
-            ax = pred[proc_area][policy_name].plot(
+            ax = pred[proc_road_cluster][policy_name].plot(
                 column="risk_change", 
                 markersize=30, 
                 figsize=figsize, 
                 cmap=vis_cfg["cmap"],
                 vmin=vis_cfg["clim"]["min"], 
                 vmax=vis_cfg["clim"]["max"])
+
+            title_str = f"Risk change: {policy_name}"
+            if title_str is not None:
+                ax.set_title(title_str)
 
             cbar_ax = ax.figure.add_axes(vis_cfg["colorbar_cfg"]["axs"]) 
             ax.figure.colorbar(
@@ -125,13 +134,9 @@ def plot_risk(
                 crs=base_data["roadline"].crs.to_string(), 
                 source=cx.providers.OpenStreetMap.Mapnik , 
                 attribution_size=1)
-            
-            title_str = f"Risk change: {policy_name}"
-            if title_str is not None:
-                plt.title(title_str)
 
             plt.savefig(
-                join(workdir, f"{proc_area}_{policy_name}.png"),
+                join(workdir, f"{proc_road_cluster}_{policy_name}.png"),
                 bbox_inches="tight"
             )
             plt.close()

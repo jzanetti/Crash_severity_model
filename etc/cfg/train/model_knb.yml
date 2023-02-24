@@ -1,5 +1,7 @@
-model_name: model_knb
-model_type: knb # xgb, knb, sgd or stack
+model_name: model_knb_no_state_highway
+model_type: knb # xgb, mlp, knb, sgd or stack
+
+state_highway: false
 
 target:
   name: crashSeverity
@@ -14,7 +16,6 @@ predictors:
   - lon
   - speedLimit
   - NumberOfLanes
-  - crashSHDescription
   - flatHill
   - weatherA
   - light

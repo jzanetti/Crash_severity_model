@@ -5,15 +5,15 @@ Usage: cli_predict
 Author: Sijin Zhang
 
 Description: 
-    This is a wrapper to get build-in dataset from climadarisk
+    This is a wrapper to do the prediction from a trained model
 
 """
 
 import argparse
 from os.path import exists
 from os import makedirs
-from process.utils import read_cfg, read_cas, get_total_cas
-from process.predict import read_base_data, read_model, area_prediction, road_prediction
+from process.utils import read_cfg
+from process.predict import read_base_data, read_model, road_prediction
 from process.vis import plot_risk
 
 def get_example_usage():
@@ -37,10 +37,10 @@ def setup_parser():
         "--cfg", required=True, help="configuration path")
 
     return parser.parse_args(
-        [
-            "--workdir", "rfm",
-            "--cfg", "etc/cfg/model_predict2.yml"
-        ]
+        # [
+        #    "--workdir", "rfm",
+        #    "--cfg", "etc/cfg/predict/model_predict_Tamaki_Drive.yml"
+        # ]
     )
 
 
@@ -66,29 +66,17 @@ def get_data():
     #    cas_total_data = get_total_cas(cas_data)
 
     print("Start prediction ...")
-    pred = {"area": {}, "raod": {}}
-    try:
-        for proc_area in cfg["areas"]:
-            pred["area"][proc_area] = area_prediction(
-                model, base_data, proc_area, cfg)
-    except KeyError:
-        pass
-    
-    try:
-        for road_cluster_name in cfg["roads"]:
-            pred["raod"][road_cluster_name] = road_prediction(
-                model, base_data, road_cluster_name, cfg)
-    except KeyError:
-        pass
+    pred = {}
+    for road_cluster_name in cfg["roads"]:
+        pred[road_cluster_name] = road_prediction(
+            model, base_data, road_cluster_name, cfg)
 
     print("Plotting ...")
     plot_risk(
         args.workdir, 
-        pred["raod"], 
+        pred, 
         base_data, 
         cfg["vis"],
-        cas_data=cas_data,
-        cas_total_data=cas_total_data, 
         figsize=(15, 15))
 
 if __name__ == "__main__":

@@ -10,7 +10,7 @@ vis:
     orientation: horizontal
     axs:
       - 0.1 # left
-      - 0.4 # bottom
+      - 0.42 # bottom
       - 0.3 # width
       - 0.01 # height
   clim:
@@ -24,12 +24,12 @@ roads:
     Tamaki Drive:
       rca_zone_name: Auckland
       base:
-        NumberOfLanes: null
-        flatHill: null
+        NumberOfLanes: 2.0
+        flatHill: "Flat"
         weatherA: "Fine"
         light: "Overcast"
         roadSurface: "Sealed"
-        speedlimit: null
+        speedlimit: 50.0
       policies:
         policy1:
           NumberOfLanes: 2.0
@@ -58,7 +58,21 @@ roads:
           weatherA: "Fine"
           light: "Dark"
           roadSurface: "Sealed"
-          speedlimit: null
+          speedlimit: 50.0
+        policy5:
+          NumberOfLanes: 4.0
+          flatHill: "Flat"
+          weatherA: "Fine"
+          light: "Overcast"
+          roadSurface: "Sealed"
+          speedlimit: 50.0
+        policy6:
+          NumberOfLanes: 2.0
+          flatHill: "Hill Road"
+          weatherA: "Fine"
+          light: "Overcast"
+          roadSurface: "Sealed"
+          speedlimit: 50.0
 predictors:
   - lat
   - lon

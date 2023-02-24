@@ -33,14 +33,6 @@ CAS_VIS = {
     }
 }
 
-
-
-
-#NSLR_DATASET  = "etc/data/road_speedlimit/National_Speed_Limit_Register_(NSLR).shp"
-#ROADLINE_DATASET = "etc/data/road_centreline/nz-road-centrelines-topo-150k.shp"
-#ROAD_SLOPE = "etc/data/road_slope/nzenvds-slope-degrees-v10.tif"
-
-
 PREDICTORS_CFG = {
     "lat": {"convert": None, "invalid_value": None},
     "lon": {"convert": None, "invalid_value": None}, 
