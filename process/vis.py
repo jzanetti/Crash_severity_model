@@ -109,26 +109,40 @@ def plot_risk(
             
             if policy_name == "base":
                 continue
+            
+            if vis_cfg["clim"] is None:
+                data_lim = max(
+                    [abs(pred[proc_road_cluster][policy_name]["risk_change"].min()), 
+                     abs(pred[proc_road_cluster][policy_name]["risk_change"].max())]
+                )
+                clim_min = -data_lim * 0.75
+                clim_max = data_lim * 0.75
+                clim_max = None
+                clim_min = None
+            else:
+                clim_min = vis_cfg["clim"]["min"]
+                clim_max = vis_cfg["clim"]["max"]
 
             ax = pred[proc_road_cluster][policy_name].plot(
                 column="risk_change", 
                 markersize=30, 
                 figsize=figsize, 
                 cmap=vis_cfg["cmap"],
-                vmin=vis_cfg["clim"]["min"], 
-                vmax=vis_cfg["clim"]["max"])
+                vmin=clim_min, 
+                vmax=clim_max)
 
             title_str = f"Risk change: {policy_name}"
             if title_str is not None:
                 ax.set_title(title_str)
 
-            cbar_ax = ax.figure.add_axes(vis_cfg["colorbar_cfg"]["axs"]) 
+            cbar_ax = ax.figure.add_axes(vis_cfg["colorbar_cfg"]["axs"])
+            
             ax.figure.colorbar(
                 ax.collections[0], 
                 orientation=vis_cfg["colorbar_cfg"]["orientation"],
                 cax=cbar_ax,
-                format=ticker.PercentFormatter(xmax=1, decimals=0))
-    
+                format=ticker.PercentFormatter(xmax=1, decimals=1))
+
             cx.add_basemap(
                 ax, 
                 crs=base_data["roadline"].crs.to_string(), 

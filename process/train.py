@@ -55,7 +55,6 @@ def get_data_for_training(dataset: DataFrame, cfg: dict) -> dict:
     proc_dataset = data_conversions(
         proc_dataset, proc_predictors_cfg)
 
-
     data_to_use = {
         "train": proc_dataset[proc_predictors_cfg],
         "target": proc_dataset[[proc_target_cfg["name"]]]

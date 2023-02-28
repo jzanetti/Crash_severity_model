@@ -3,7 +3,8 @@ from yaml import safe_load
 from pandas import DataFrame, read_csv
 from pyproj import Proj, transform
 from geopandas import GeoDataFrame, points_from_xy
-
+from scipy.stats import gaussian_kde
+from numpy import vstack, mgrid
 
 def get_cas_meta(cas_data: GeoDataFrame, years: list or None, regions: list, crash_severity: list, vehicle_types: list):
     """Get Total crash meta information
@@ -115,7 +116,7 @@ def read_cfg(cfg_path: str) -> dict:
     return cfg
 
 
-def read_cas(add_geometry: bool = False) -> DataFrame:
+def read_cas(add_geometry: bool = False, get_density: bool = False) -> DataFrame:
     """Read CAS dataset
 
        Args:
@@ -150,6 +151,25 @@ def read_cas(add_geometry: bool = False) -> DataFrame:
             geometry=points_from_xy(
                 dataset['lon'], 
                 dataset['lat'])
+        )
+
+    if get_density:
+
+        x = dataset.geometry.x
+        y = dataset.geometry.y
+        coords = vstack([x, y])
+
+        kde = gaussian_kde(coords)
+
+        xmin, ymin, xmax, ymax = dataset.total_bounds
+        xgrid, ygrid = mgrid[xmin:xmax:100j, ymin:ymax:100j]
+        density_surface = kde(vstack([xgrid.ravel(), ygrid.ravel()]))
+
+        dataset = GeoDataFrame(
+            {
+                "density": density_surface.ravel(),
+                "geometry": points_from_xy(xgrid.ravel(), ygrid.ravel())
+            }
         )
 
     return dataset

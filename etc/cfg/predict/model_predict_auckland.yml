@@ -21,10 +21,10 @@ vis:
 
 roads:
   myroad0:
-    Tamaki Drive:
+    KARANGAHAPE RD:
       rca_zone_name: Auckland
       base:
-        NumberOfLanes: 2.0
+        NumberOfLanes: null
         flatHill: "Flat"
         weatherA: "Fine"
         light: "Overcast"
@@ -32,47 +32,46 @@ roads:
         speedlimit: null
       policies:
         policy1:
-          NumberOfLanes: 2.0
+          NumberOfLanes: null
           flatHill: "Flat"
           weatherA: "Fine"
           light: "Overcast"
           roadSurface: "Sealed"
-          speedlimit: 30.0
-        policy2:
-          NumberOfLanes: 2.0
+          speedlimit: 70.0
+    QUAY ST:
+      rca_zone_name: Auckland
+      base:
+        NumberOfLanes: null
+        flatHill: "Flat"
+        weatherA: "Fine"
+        light: "Overcast"
+        roadSurface: "Sealed"
+        speedlimit: null
+      policies:
+        policy1:
+          NumberOfLanes: null
+          flatHill: "Flat"
+          weatherA: "Fine"
+          light: "Overcast"
+          roadSurface: "Sealed"
+          speedlimit: 70.0
+    Tamaki Drive:
+      rca_zone_name: Auckland
+      base:
+        NumberOfLanes: null
+        flatHill: "Flat"
+        weatherA: "Fine"
+        light: "Overcast"
+        roadSurface: "Sealed"
+        speedlimit: null
+      policies:
+        policy1:
+          NumberOfLanes: null
           flatHill: "Flat"
           weatherA: "Fine"
           light: "Overcast"
           roadSurface: "Sealed"
           speedlimit: 40.0
-        policy3:
-          NumberOfLanes: 2.0
-          flatHill: "Flat"
-          weatherA: "Fine"
-          light: "Overcast"
-          roadSurface: "Sealed"
-          speedlimit: 60.0
-        policy4:
-          NumberOfLanes: 2.0
-          flatHill: "Flat"
-          weatherA: "Fine"
-          light: "Dark"
-          roadSurface: "Sealed"
-          speedlimit: 50.0
-        policy5:
-          NumberOfLanes: 4.0
-          flatHill: "Flat"
-          weatherA: "Fine"
-          light: "Overcast"
-          roadSurface: "Sealed"
-          speedlimit: 50.0
-        policy6:
-          NumberOfLanes: 2.0
-          flatHill: "Hill Road"
-          weatherA: "Fine"
-          light: "Overcast"
-          roadSurface: "Sealed"
-          speedlimit: 50.0
 predictors:
   - lat
   - lon

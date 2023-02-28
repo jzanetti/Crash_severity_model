@@ -15,6 +15,7 @@ from os import makedirs
 from process.utils import read_cfg
 from process.predict import read_base_data, read_model, road_prediction
 from process.vis import plot_risk
+from process.utils import read_cas
 
 def get_example_usage():
     example_text = """example:
@@ -39,7 +40,7 @@ def setup_parser():
     return parser.parse_args(
         # [
         #    "--workdir", "rfm",
-        #    "--cfg", "etc/cfg/predict/model_predict_Tamaki_Drive.yml"
+        #    "--cfg", "etc/cfg/predict/model_predict_auckland.yml"
         # ]
     )
 
@@ -59,17 +60,13 @@ def get_data():
     model = read_model(cfg["model_path"])
 
     print("Reading CAS ...")
-    cas_data = None
-    cas_total_data = None
-    #if cfg["vis"]["cas"]["enable"]:
-    #    cas_data = read_cas(add_geometry=True)
-    #    cas_total_data = get_total_cas(cas_data)
+    cas_data = read_cas(add_geometry=True, get_density=True)
 
     print("Start prediction ...")
     pred = {}
     for road_cluster_name in cfg["roads"]:
         pred[road_cluster_name] = road_prediction(
-            model, base_data, road_cluster_name, cfg)
+            model, base_data, cas_data, road_cluster_name, cfg)
 
     print("Plotting ...")
     plot_risk(

@@ -1,13 +1,13 @@
 from geopandas import read_file as gpd_read_file
 from pickle import load as pickle_load
 from pandas import DataFrame
-from geopandas import sjoin
+from geopandas import sjoin, sjoin_nearest
 from process.utils import data_conversions
 from geopandas import GeoDataFrame, points_from_xy
 from rioxarray import open_rasterio
 from xarray.core.dataarray import DataArray
 from copy import deepcopy
-
+from libpysal.weights import DistanceBand, lag_spatial
 
 def read_base_data(input_cfg: dict) -> dict:
     """Read base data for the model prediction
@@ -105,7 +105,7 @@ def get_data_for_prediction(
     return DataFrame.from_dict(output)
 
 
-def road_prediction(model :dict, base_data: dict, road_cluster_name: str, predict_cfg: dict) -> DataFrame:
+def road_prediction(model :dict, base_data: dict, cas_data: DataFrame,road_cluster_name: str, predict_cfg: dict) -> DataFrame:
     """Run road predictions
 
     Args:
@@ -169,16 +169,18 @@ def road_prediction(model :dict, base_data: dict, road_cluster_name: str, predic
 
         proc_speed_zone_data = proc_speed_zone_data.to_crs(4326)
 
-        cur_road_data = base_data["roadline"].loc[base_data["roadline"]["name_ascii"] == cur_road_name.upper()]
+        cur_road_data = base_data["roadline"].loc[
+            base_data["roadline"]["name_ascii"] == cur_road_name.replace(
+            "RD", "ROAD").replace(
+            "ST", "STREET").upper()]
 
-        proc_data = sjoin(cur_road_data, proc_speed_zone_data, op='intersects')
+        proc_data = sjoin(cur_road_data, proc_speed_zone_data, op="intersects")
 
         proc_all_roads = proc_data.apply(
             lambda x: [y for y in (
                 x["geometry"].coords, 
                 x["speedLim_2"], 
                 x["lane_count"])], axis=1)
-
 
         predictors_info = _add_pseudo_latlon(predict_cfg["predictors"])
 
@@ -227,6 +229,10 @@ def road_prediction(model :dict, base_data: dict, road_cluster_name: str, predic
 
         index = 0
         for proc_road in output:
+
+            if proc_policy not in output[proc_road]:
+                continue
+
             proc_output = output[proc_road][proc_policy]
             if index == 0:
                 prediction[proc_policy] = proc_output
@@ -241,14 +247,38 @@ def road_prediction(model :dict, base_data: dict, road_cluster_name: str, predic
                 prediction[proc_policy].lon, 
                 prediction[proc_policy].lat)
             )
-
-    prediction = calculate_risk_change(prediction)
+        
+    prediction = calculate_risk_change(prediction, cas_data)
 
     return prediction
 
 
 
-def calculate_risk_change(prediction: dict) -> dict:
+def calculate_risk_change(prediction: dict, cas_data: DataFrame or None) -> dict:
+
+    #if cas_data is not None:
+    #    w = DistanceBand.from_dataframe(cas_data, threshold=0.03)
+    #    w.transform = "r"
+    #    cas_data["density_smoothed"] = lag_spatial(w, cas_data["density"])
+
+    def _attach_cas_density(prediction: DataFrame, cas_data: DataFrame):
+        """Attach cas density to the predict risk_change
+
+        Args:
+            prediction (DataFrame): predictions
+            cas_data (DataFrame): CAS data
+        """
+        prediction = sjoin_nearest(
+            prediction, cas_data, max_distance=0.1)
+        
+        prediction["density"] = prediction["density"] / prediction["density"].max()
+        prediction["risk_change"] = prediction["risk_change"] * prediction["density"]
+
+        w = DistanceBand.from_dataframe(prediction, threshold=0.03)
+        w.transform = "r"
+        prediction["risk_change"] = lag_spatial(w, prediction["risk_change"])
+    
+        return prediction
 
     for proc_policy_name in prediction:
         if proc_policy_name == "base":
@@ -265,8 +295,15 @@ def calculate_risk_change(prediction: dict) -> dict:
                 (abs(proc_policy["lon"] - proc_base_row_lon) < 0.001)]
             proc_policy_risk = proc_policy_row["risk"]
 
+            if len(proc_policy_risk) == 0:
+                continue
+
             prediction[proc_policy_name].loc[index, "risk_change"] = (
                 proc_policy_risk - proc_base_row_risk).values[0]
+
+        if cas_data is not None:
+            prediction[proc_policy_name] = _attach_cas_density(
+                prediction[proc_policy_name], cas_data)
 
     return prediction
 

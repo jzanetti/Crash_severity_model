@@ -9,11 +9,11 @@ target:
     Non-Injury Crash: 0.0
     Minor Crash: 0.0
     Serious Crash: 1.0
-    Fatal Crash: 1.0
+    Fatal Crash: 3.0
 
 predictors:
-  #- lat
-  #- lon
+  - lat
+  - lon
   - speedLimit
   - NumberOfLanes
   - flatHill

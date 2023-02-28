@@ -35,7 +35,7 @@ def setup_parser():
     return parser.parse_args(
         # [
         #    "--workdir", "rfm",
-        #    "--cfg", "etc/cfg/train/model_sgd.yml"
+        #    "--cfg", "etc/cfg/train/model_stack.yml"
         # ]
     )
 
